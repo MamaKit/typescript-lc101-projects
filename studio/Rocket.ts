@@ -2,31 +2,35 @@ import { Payload } from "./Payload";
 import { Astronaut } from "./Astronaut";
 import { Cargo } from "./Cargo";
 
-var Rocket = /** @class */ (function (){
-    function Rocket(name: string, totalCapacity: number) {
+export class Rocket implements Payload {
+    name: string;
+    totalCapacity: number;
+    cargoItems: Cargo[] = [];
+    astronauts: Astronaut[] = [];
+    massKg: number;
+
+    constructor (name: string, totalCapacity: number) {
         this.name = name;
         this.totalCapacity = totalCapacity;
-        this.cargoItems;
-        this.astronauts;
     };
 
-    this.sumMass = function( items: Payload[] ): number {
-        let sum = 0;
+    sumMass ( items: Payload[] ): number {
+        let sum: number = 0;
         for (let i = 0; i < items.length; i++) {
             sum += items[i].massKg;
         }
         return sum;
     };
 
-    this.currentMassKg = () => {
+    currentMassKg() {
         return this.sumMass(this.astronauts) + this.sumMass(this.cargoItems);
     };
 
-    this.canAdd = function (item: Payload): boolean {
-        return (this.currentMassKg() + item.massKg) <= this.totalCapacityKg;
+    canAdd (item: Payload): boolean {
+        return (this.currentMassKg() + item.massKg) <= this.totalCapacity;
     };
 
-    this.addCargo = function (cargo: Cargo): boolean {
+    addCargo (cargo: Cargo): boolean {
         if (this.canAdd(cargo)) {
             this.cargoItems.push(cargo);
             return true;
@@ -35,7 +39,7 @@ var Rocket = /** @class */ (function (){
         }
     };
 
-    this.addAstronaut= function (astronaut: Astronaut): boolean {
+    addAstronaut (astronaut: Astronaut): boolean {
         if (this.canAdd(astronaut)) {
             this.astronauts.push(astronaut);
             return true;
@@ -43,4 +47,4 @@ var Rocket = /** @class */ (function (){
             return false;
         }
     };
-});
+}
